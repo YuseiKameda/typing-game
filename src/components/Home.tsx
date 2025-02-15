@@ -1,7 +1,7 @@
 // src/components/Home.tsx
 import React, { useState } from 'react';
 
-const Home: React.FC = () => {
+const HomePage: React.FC = () => {
   // モード: タイムアタック（全問完了時間） vs. 時間制限モード（スコア計算）
   const [mode, setMode] = useState<'time_attack' | 'time_limit'>('time_attack');
   // 難易度: "human"（人間モード）、"superhuman"（超人モード）、"alien"（宇宙人モードなど）
@@ -77,4 +77,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default HomePage;

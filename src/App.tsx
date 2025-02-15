@@ -1,16 +1,23 @@
 import './App.css'
-// import Home from './pages/Home'
-// import TypingTextsList from './pages/TypingTextList'
-import TypingGame from './pages/TypingGame'
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import ProblemCountSetupPage from './pages/ProblemCountSetupPage';
+import ProblemCountGamePage from './pages/ProblemCountGamePage'; 
+import ProblemCountResultPage from './pages/ProblemCountResultPage';
 
-function App() {
+
+const App: React.FC = () => {
 
   return (
-    <>
-      {/* <Home /> */}
-      {/* <TypingTextsList /> */}
-      <TypingGame />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/setup" element={<ProblemCountSetupPage />} />
+        <Route path="/game" element={<ProblemCountGamePage />} />
+        <Route path="/result" element={<ProblemCountResultPage />} />
+      </Routes>
+    </Router>
   )
 }
 

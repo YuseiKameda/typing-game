@@ -9,7 +9,7 @@ const sampleTexts = [
   "TypeScript で堅牢なコードを書く",
 ];
 
-const TypingGame: React.FC = () => {
+const GamePage: React.FC = () => {
   const [targetText, setTargetText] = useState<string>("");
   const [userInput, setUserInput] = useState<string>("");
   const [gameStarted, setGameStarted] = useState<boolean>(false);
@@ -95,4 +95,4 @@ const TypingGame: React.FC = () => {
   );
 };
 
-export default TypingGame;
+export default GamePage;
