@@ -138,9 +138,9 @@ const ProblemCountSetupPage: React.FC = () => {
         if (!typingText) return null;
         return (
         <div className="space-y-2">
-            <div className="mt-8 text-5xl font-bold text-white">{texts[currentIndex].original}</div>
-            <div className="text-2xl text-gray-400 font-medium">{texts[currentIndex].hiragana}</div>
-            <div className="text-xl text-blue-600 font-mono">
+            <div className="mt-8 text-4xl font-bold text-white">{texts[currentIndex].original}</div>
+            <div className="text-2xl text-gray-300 font-medium">{texts[currentIndex].hiragana}</div>
+            <div className="text-xl text-green-500 font-mono">
                 <span className="font-bold">{userInputDisplay}</span>
                 <span className="text-gray-200">{typingText.remainingRoman}</span>
             </div>
@@ -157,12 +157,17 @@ const ProblemCountSetupPage: React.FC = () => {
                 <div className='text-6xl font-bold'>{countdown}</div>
             ) : (
                 <>
-                    <div className='mb-2'>{renderProblemText()}</div>
-                    {feedback && <p className='mt-2 text-red-500'>{feedback}</p>}
-                    <div className="mt-4">
-                        <Link to="/" className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700">
-                        ホームへ戻る
-                        </Link>
+                    <div className={
+                            "w-full max-w-3xl bg-gradient-to-r from-gray-400 to-black rounded-3xl border border-gray-800 p-8 space-y-8 shadow-2xl" + 
+                            (feedback === 'ミスタイプ！' ? "border-4 border-red-500" : "border border-gray-800")
+                            }>
+                        <div className='flex-grow flex flex-col items-center justify-center'>{renderProblemText()}</div>
+                        {/* {feedback && <p className='text-red-500 text-center'>{feedback}</p>} */}
+                        <div className="mt-4 flex justify-center">
+                            <Link to="/" className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700">
+                            ホームへ戻る
+                            </Link>
+                        </div>
                     </div>
                 </>
             )}
