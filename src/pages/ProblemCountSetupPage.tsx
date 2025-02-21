@@ -11,7 +11,7 @@ const ProblemCountSetupPage: React.FC = () => {
     };
 
     return (
-        <div className='min-h-screen flex flex-col justify-center items-center bg-gray-100 p-4'>
+        <div className='min-h-screen flex flex-col justify-center items-center p-4 bg-[url(/backgroundImage.jpeg)] bg-cover bg-center'>
             <h2 className='text-3xl font-bold mb-6'>モード設定</h2>
             <div className='w-full max-w-md bg-white p-6 rounded shadow-md'>
                 {/* 難易度選択 */}

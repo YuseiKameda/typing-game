@@ -19,7 +19,7 @@ const ProblemCountResultPage: React.FC = () => {
     const { totalTime } = state;
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[url(/backgroundImage.jpeg)] bg-cover bg-center">
         <h2 className="text-3xl font-bold mb-6">結果</h2>
         <p className="text-xl mb-8">
             全 {totalTime.toFixed(2)} 秒でクリアしました！
