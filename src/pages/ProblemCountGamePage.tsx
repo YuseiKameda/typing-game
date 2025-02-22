@@ -31,6 +31,9 @@ const ProblemCountSetupPage: React.FC = () => {
     const [countdown, setCountdown] = useState<number>(3);
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [startTime, setStartTime] = useState<number | null>(null);
+
+    const [totalCorrect, setTotalCorrect] = useState<number>(0);
+    const [totalMistakes, setTotalMistakes] = useState<number>(0);
     
     useEffect(() => {
         if (!state) {
@@ -97,9 +100,9 @@ const ProblemCountSetupPage: React.FC = () => {
             const result = typingText.inputKey(key);
     
             setUserInputDisplay(typingText.completedRoman);
-    
             if (result === 'unmatch') {
                 setFeedback('ミスタイプ！');
+                setTotalMistakes((prev) => prev + 1);
                 return;
             } else if (result === 'incomplete') {
                 setFeedback('');
@@ -108,6 +111,8 @@ const ProblemCountSetupPage: React.FC = () => {
                 setFeedback('正解！');
                 // 入力欄をクリア
                 setUserInputDisplay('');
+                // 正解数を更新
+                setTotalCorrect((prev) => prev + typingText.completedRoman.length);
                 // 次のテキストへ移行
                 if (currentIndex + 1 < texts.length) {
                     const nextIndex = currentIndex + 1;
@@ -119,7 +124,7 @@ const ProblemCountSetupPage: React.FC = () => {
                     // 全問終了時の処理
                     const endTime = Date.now();
                     const totalTime = (endTime - (startTime || endTime)) / 1000;
-                    navigate('/result', { state: { totalTime } });
+                    navigate('/result', { state: { totalTime, totalCorrect, totalMistakes } });
                 }
             }
             setFeedback('');
@@ -129,7 +134,7 @@ const ProblemCountSetupPage: React.FC = () => {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         }
-    }, [gameStarted, typingText, currentIndex, texts, startTime, navigate]);
+    }, [gameStarted, typingText, currentIndex, texts, startTime, totalCorrect, totalMistakes, navigate]);
 
 
 
