@@ -16,7 +16,7 @@ const HomePage: React.FC = () => {
             時間制限モード（準備中）
           </Link>
           <Link to="/ranking"
-                className="w-64 text-center px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">
+                className="w-64 text-center px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800">
             ランキングを見る
           </Link>
         </div>

@@ -19,9 +19,10 @@ const ProblemCountResultPage: React.FC = () => {
     }
 
     const { totalTime, totalCorrect, totalMistakes } = state;
-    const totalKeystrokes = totalCorrect + totalMistakes;
-    const kps = totalTime > 0 ? (totalCorrect / totalTime).toFixed(2) : '0';
-    const accuracy = totalKeystrokes > 0 ? ((totalCorrect /totalKeystrokes) * 100).toFixed(1) : '0';
+    const finalTotalCorrect = totalCorrect + 1
+    const totalKeystrokes = finalTotalCorrect + totalMistakes;
+    const kps = totalTime > 0 ? (finalTotalCorrect / totalTime).toFixed(2) : '0';
+    const accuracy = totalKeystrokes > 0 ? ((finalTotalCorrect /totalKeystrokes) * 100).toFixed(1) : '0';
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[url(/backgroundImage.jpeg)] bg-cover bg-center">
@@ -35,7 +36,7 @@ const ProblemCountResultPage: React.FC = () => {
                     <p>
                         <span className='text-sm text-gray-300'>総タイプ数：</span>
                         <span className='text-xl font-bold text-white'>
-                            {totalKeystrokes} <span className='text-base font-normal text-gray-200'>(正: {totalCorrect} / 誤: {totalMistakes})</span>
+                            {totalKeystrokes} <span className='text-base font-normal text-gray-200'>(正: {finalTotalCorrect} / 誤: {totalMistakes})</span>
                         </span>
                     </p>
                     <p>
@@ -50,13 +51,13 @@ const ProblemCountResultPage: React.FC = () => {
                 <div className="flex flex-col space-y-4 items-center">
                     <Link
                     to="/ranking"
-                    className="w-64 text-center py-2 px-4 bg-green-500 text-white rounded hover:bg-green-700"
+                    className="w-64 text-center block py-2 px-4 bg-gray-700 text-white rounded hover:bg-gray-800"
                     >
                     ランキング一覧
                     </Link>
                     <Link
                     to="/"
-                    className="w-64 text-center py-2 px-4 bg-gray-500 text-white rounded hover:bg-gray-700"
+                    className='w-64 text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'
                     >
                     ホームへ戻る
                     </Link>

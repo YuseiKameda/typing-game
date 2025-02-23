@@ -15,6 +15,18 @@ interface DBText {
     created_at: string;
 }
 
+interface RankingRecord {
+    mode: string;
+    difficulty: string;
+    problem_count: number;
+    time_limit: number | null;
+    clear_time: number;
+    correct_count: number;
+    mistake_count: number;
+    nickname: string;
+    icon: string | null;
+}
+
 
 const ProblemCountSetupPage: React.FC = () => {
     const location = useLocation();
@@ -72,6 +84,7 @@ const ProblemCountSetupPage: React.FC = () => {
         fetchTexts();
     }, [difficulty, problemCount]);
 
+    // カウントダウン
     useEffect(() => {
         if (texts.length > 0 && typingText && !gameStarted) {
             const timer = setInterval(() => {
@@ -89,10 +102,19 @@ const ProblemCountSetupPage: React.FC = () => {
         }
     }, [texts, typingText, gameStarted]);
 
+    // 記録登録用関数
+    const registerRecord = async (record: RankingRecord) => {
+        const { error } = await supabase
+            .from('typing_rankings')
+            .insert([record]);
+        if(error) {
+            console.error('Error inserting record:', error);
+        }
+    };
 
     // キー入力判定
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
+        const handleKeyDown = async (e: KeyboardEvent) => {
             if (!typingText) return;
             const key = e.key;
             if (!TypingText.isValidInputKey(key)) return;
@@ -107,12 +129,11 @@ const ProblemCountSetupPage: React.FC = () => {
             } else if (result === 'incomplete') {
                 setFeedback('');
                 setUserInputDisplay(typingText.completedRoman);
+                setTotalCorrect((prev) => prev + 1);
             } else if (result === 'complete') {
                 setFeedback('正解！');
-                // 入力欄をクリア
                 setUserInputDisplay('');
-                // 正解数を更新
-                setTotalCorrect((prev) => prev + typingText.completedRoman.length);
+                setTotalCorrect((prev) => prev + 1);
                 // 次のテキストへ移行
                 if (currentIndex + 1 < texts.length) {
                     const nextIndex = currentIndex + 1;
@@ -124,6 +145,18 @@ const ProblemCountSetupPage: React.FC = () => {
                     // 全問終了時の処理
                     const endTime = Date.now();
                     const totalTime = (endTime - (startTime || endTime)) / 1000;
+                    const record = {
+                        mode: 'problem_count',
+                        difficulty,
+                        problem_count: problemCount,
+                        time_limit: null,
+                        clear_time: totalTime,
+                        correct_count: totalCorrect,
+                        mistake_count: totalMistakes,
+                        nickname: 'anonymous',
+                        icon: null,
+                    };
+                    await registerRecord(record);
                     navigate('/result', { state: { totalTime, totalCorrect, totalMistakes } });
                 }
             }
@@ -134,7 +167,7 @@ const ProblemCountSetupPage: React.FC = () => {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         }
-    }, [gameStarted, typingText, currentIndex, texts, startTime, totalCorrect, totalMistakes, navigate]);
+    }, [gameStarted, typingText, currentIndex, texts, startTime, totalCorrect, totalMistakes, difficulty, problemCount, navigate]);
 
 
 
@@ -143,6 +176,7 @@ const ProblemCountSetupPage: React.FC = () => {
         if (!typingText) return null;
         return (
         <div className="space-y-2">
+            <div className='text-white'>タイプ数: {totalCorrect}</div>
             <div className="mt-8 text-4xl font-bold text-white">{texts[currentIndex].original}</div>
             <div className="text-2xl text-gray-300 font-medium">{texts[currentIndex].hiragana}</div>
             <div className="text-xl text-green-500 font-mono">
@@ -169,7 +203,7 @@ const ProblemCountSetupPage: React.FC = () => {
                         <div className='flex-grow flex flex-col items-center justify-center'>{renderProblemText()}</div>
                         {/* {feedback && <p className='text-red-500 text-center'>{feedback}</p>} */}
                         <div className="mt-4 flex justify-center">
-                            <Link to="/" className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700">
+                            <Link to="/" className='text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'>
                             ホームへ戻る
                             </Link>
                         </div>

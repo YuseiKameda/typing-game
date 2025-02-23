@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import ProblemCountSetupPage from './pages/ProblemCountSetupPage';
 import ProblemCountGamePage from './pages/ProblemCountGamePage'; 
 import ProblemCountResultPage from './pages/ProblemCountResultPage';
+import RankingPage from './pages/RankingPage';
 
 
 const App: React.FC = () => {
@@ -16,6 +17,7 @@ const App: React.FC = () => {
         <Route path="/setup" element={<ProblemCountSetupPage />} />
         <Route path="/game" element={<ProblemCountGamePage />} />
         <Route path="/result" element={<ProblemCountResultPage />} />
+        <Route path="/ranking" element={<RankingPage />} />
       </Routes>
     </Router>
   )
