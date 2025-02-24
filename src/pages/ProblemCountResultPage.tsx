@@ -1,28 +1,81 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabaseClient';
+import NicknameModal from '../components/NicknameModal';
 
 interface LocationState {
     totalTime: number;
     totalCorrect: number;
     totalMistakes: number;
+    difficulty: string;
+    problemCount: number;
+}
+
+interface RankingRecord {
+    mode: string;
+    difficulty: string;
+    problem_count: number;
+    time_limit: number | null;
+    clear_time: number;
+    correct_count: number;
+    mistake_count: number;
+    nickname: string;
+    icon: string | null;
+    created_at?: string;
 }
 
 const ProblemCountResultPage: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const state = location.state as LocationState | undefined;
+    const [showNicknameModal, setShowNicknameModal] = useState<boolean>(false);
+    const [recordRegistered, setRecordRegistered] = useState<boolean>(false);
 
     if (!state) {
-        // 状態がない場合はホームに戻る
         navigate('/');
         return null;
     }
 
-    const { totalTime, totalCorrect, totalMistakes } = state;
+    const { totalTime, totalCorrect, totalMistakes, difficulty, problemCount } = state;
     const finalTotalCorrect = totalCorrect + 1
     const totalKeystrokes = finalTotalCorrect + totalMistakes;
     const kps = totalTime > 0 ? (finalTotalCorrect / totalTime).toFixed(2) : '0';
     const accuracy = totalKeystrokes > 0 ? ((finalTotalCorrect /totalKeystrokes) * 100).toFixed(1) : '0';
+
+    // 記録登録用関数
+    const registerRecord = async (record: RankingRecord) => {
+        const { error } = await supabase
+            .from('typing_rankings')
+            .insert([record]);
+        if(error) {
+            console.error('Error inserting record:', error);
+        }
+    };
+
+    const handleYes = () => {
+        setShowNicknameModal(true);
+    };
+
+    const handleNicknameConfirm = async (nickname: string, icon: string | null) => {
+        setShowNicknameModal(false);
+        const record: RankingRecord = {
+            mode: 'problem_count',
+            difficulty,
+            problem_count: problemCount,
+            time_limit: null,
+            clear_time: totalTime,
+            correct_count: finalTotalCorrect,
+            mistake_count: totalMistakes,
+            nickname,
+            icon,
+        };
+        await registerRecord(record);
+        setRecordRegistered(true);
+    };
+
+    const handleCancel = () => {
+        setShowNicknameModal(false);
+    };
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[url(/backgroundImage.jpeg)] bg-cover bg-center">
@@ -48,21 +101,34 @@ const ProblemCountResultPage: React.FC = () => {
                         <span className='text-xl font-bold text-white'>{accuracy} %</span>
                     </p>
                 </div>
-                <div className="flex flex-col space-y-4 items-center">
-                    <Link
-                    to="/ranking"
-                    className="w-64 text-center block py-2 px-4 bg-gray-700 text-white rounded hover:bg-gray-800"
-                    >
-                    ランキング一覧
-                    </Link>
-                    <Link
-                    to="/"
-                    className='w-64 text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'
-                    >
-                    ホームへ戻る
-                    </Link>
+                {!recordRegistered && (
+                    <div className="flex flex-col space-y-4 mt-4 items-center">
+                        <p className="text-lg text-yellow-500 text-center">記録に名前をつけて登録しませんか？</p>
+                            <button onClick={handleYes} className="w-64 text-center px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">
+                                記録を登録
+                            </button>
+                    </div>
+                )}
+                    <div className="flex flex-col space-y-4 items-center">
+                        <Link
+                        to="/ranking"
+                        className="w-64 text-center block py-2 px-4 bg-gray-700 text-white rounded hover:bg-gray-800"
+                        >
+                        ランキング
+                        </Link>
+                    </div>
             </div>
-        </div>
+            <div className='flex flex-col space-y-4 items-center'>
+                <Link
+                to="/"
+                className='w-64 text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'
+                >
+                ホームへ戻る
+                </Link>
+            </div>
+            {showNicknameModal && (
+                <NicknameModal onConfirm={handleNicknameConfirm} onCancel={handleCancel} />
+            )}
         </div>
     );
 };

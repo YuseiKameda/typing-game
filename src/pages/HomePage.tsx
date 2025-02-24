@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
           </Link>
           <Link to="/ranking"
                 className="w-64 text-center px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800">
-            ランキングを見る
+            ランキング
           </Link>
         </div>
       </div>

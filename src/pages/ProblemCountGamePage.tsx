@@ -15,17 +15,17 @@ interface DBText {
     created_at: string;
 }
 
-interface RankingRecord {
-    mode: string;
-    difficulty: string;
-    problem_count: number;
-    time_limit: number | null;
-    clear_time: number;
-    correct_count: number;
-    mistake_count: number;
-    nickname: string;
-    icon: string | null;
-}
+// interface RankingRecord {
+//     mode: string;
+//     difficulty: string;
+//     problem_count: number;
+//     time_limit: number | null;
+//     clear_time: number;
+//     correct_count: number;
+//     mistake_count: number;
+//     nickname: string;
+//     icon: string | null;
+// }
 
 
 const ProblemCountSetupPage: React.FC = () => {
@@ -43,6 +43,8 @@ const ProblemCountSetupPage: React.FC = () => {
     const [countdown, setCountdown] = useState<number>(3);
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [startTime, setStartTime] = useState<number | null>(null);
+
+    const [elapsedTime, setElapsedTime] = useState<number>(0);
 
     const [totalCorrect, setTotalCorrect] = useState<number>(0);
     const [totalMistakes, setTotalMistakes] = useState<number>(0);
@@ -102,15 +104,26 @@ const ProblemCountSetupPage: React.FC = () => {
         }
     }, [texts, typingText, gameStarted]);
 
-    // 記録登録用関数
-    const registerRecord = async (record: RankingRecord) => {
-        const { error } = await supabase
-            .from('typing_rankings')
-            .insert([record]);
-        if(error) {
-            console.error('Error inserting record:', error);
+    // 経過時間を更新
+    useEffect(() => {
+        let timer: number;
+        if (gameStarted && startTime) {
+            timer = window.setInterval(() => {
+                setElapsedTime((Date.now() - startTime) / 1000);
+            }, 1000);
         }
-    };
+        return () => clearInterval(timer);
+    }, [gameStarted, startTime])
+
+    // 記録登録用関数
+    // const registerRecord = async (record: RankingRecord) => {
+    //     const { error } = await supabase
+    //         .from('typing_rankings')
+    //         .insert([record]);
+    //     if(error) {
+    //         console.error('Error inserting record:', error);
+    //     }
+    // };
 
     // キー入力判定
     useEffect(() => {
@@ -145,19 +158,19 @@ const ProblemCountSetupPage: React.FC = () => {
                     // 全問終了時の処理
                     const endTime = Date.now();
                     const totalTime = (endTime - (startTime || endTime)) / 1000;
-                    const record = {
-                        mode: 'problem_count',
-                        difficulty,
-                        problem_count: problemCount,
-                        time_limit: null,
-                        clear_time: totalTime,
-                        correct_count: totalCorrect,
-                        mistake_count: totalMistakes,
-                        nickname: 'anonymous',
-                        icon: null,
-                    };
-                    await registerRecord(record);
-                    navigate('/result', { state: { totalTime, totalCorrect, totalMistakes } });
+                    // const record = {
+                    //     mode: 'problem_count',
+                    //     difficulty,
+                    //     problem_count: problemCount,
+                    //     time_limit: null,
+                    //     clear_time: totalTime,
+                    //     correct_count: totalCorrect,
+                    //     mistake_count: totalMistakes,
+                    //     nickname: 'anonymous',
+                    //     icon: null,
+                    // };
+                    // await registerRecord(record);
+                    navigate('/result', { state: { totalTime, totalCorrect, totalMistakes, difficulty, problemCount } });
                 }
             }
             setFeedback('');
@@ -200,18 +213,25 @@ const ProblemCountSetupPage: React.FC = () => {
                             "w-full max-w-3xl bg-gradient-to-r from-gray-400 to-black rounded-3xl border border-gray-800 p-8 space-y-8 shadow-2xl" + 
                             (feedback === 'ミスタイプ！' ? "border-4 border-red-500" : "border border-gray-800")
                             }>
-                        <div className='flex-grow flex flex-col items-center justify-center'>{renderProblemText()}</div>
-                        {/* {feedback && <p className='text-red-500 text-center'>{feedback}</p>} */}
-                        <div className="mt-4 flex justify-center">
-                            <Link to="/" className='text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'>
-                            ホームへ戻る
-                            </Link>
+                        {/* 問題数と経過時間を表示 */}
+                        <div className='flex justify-end items-center'>
+                            <span className='text-white text-lg'>{elapsedTime.toFixed()} 秒</span>
+                            <span className='text-white text-lg font-bold ml-4'>{currentIndex + 1}/{texts.length} </span>
                         </div>
+                        <div className='flex-grow flex flex-col items-center justify-center mb-8'>{renderProblemText()}</div>
+                    </div>
+                    <div className='flex flex-col space-y-4 items-center'>
+                        <Link
+                        to="/"
+                        className='w-64 text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'
+                        >
+                        ホームへ戻る
+                        </Link>
                     </div>
                 </>
             )}
-            </div>
-        );
-    };
+        </div>
+    );
+};
 
 export default ProblemCountSetupPage;

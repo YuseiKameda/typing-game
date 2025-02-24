@@ -14,17 +14,11 @@ const ProblemCountSetupPage: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[url('/backgroundImage.jpeg')] bg-cover bg-center flex items-center justify-center p-4">
+        <div className="min-h-screen bg-[url('/backgroundImage.jpeg')] bg-cover bg-center flex flex-col items-center justify-center p-4">
             <div className="w-full max-w-2xl bg-gradient-to-r from-gray-400 to-black rounded-3xl border border-gray-800 p-8 space-y-8 shadow-2xl">
                 <DifficultySelect difficulty={difficulty} setDifficulty={setDifficulty} />
                 <QuestionCountSelect problemCount={problemCount} setProblemCount={setProblemCount} />
-                <div className="flex justify-between pt-4">
-                <Link
-                    to='/'
-                    className='text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'
-                >
-                    ホームへ戻る
-                </Link>
+                <div className="flex items-center justify-center pt-4">
                 <Button
                     variant="default"
                     onClick={handleStart}
@@ -34,6 +28,14 @@ const ProblemCountSetupPage: React.FC = () => {
                     スタート
                 </Button>
                 </div>
+            </div>
+            <div className='flex flex-col space-y-4 items-center'>
+                <Link
+                to="/"
+                className='w-64 text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'
+                >
+                ホームへ戻る
+                </Link>
             </div>
         </div>
     );

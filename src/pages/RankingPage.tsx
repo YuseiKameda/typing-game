@@ -114,7 +114,7 @@ const RankingPage: React.FC = () => {
                                         <div className="flex items-center space-x-2">
                                             <span className="text-lg font-bold text-white">{index + 1}位</span>
                                             {/* アイコンがあれば表示 */}
-                                            {record.icon && <img src={record.icon} alt="icon" />}
+                                            {record.icon && <img src={record.icon} alt="icon" className="w-10 h-10"/>}
                                             <span className="text-white">{record.nickname}</span>
                                         </div>
                                         <div className="text-white text-right">

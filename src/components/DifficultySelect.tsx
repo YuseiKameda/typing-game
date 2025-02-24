@@ -23,7 +23,7 @@ const DifficultySelect: React.FC<DifficultySelectProps> = ({ difficulty, setDiff
         <div className="space-y-6">
             <div className="relative">
                 <div className="bg-gray-600 text-white text-center py-2 px-6 rounded-lg font-bold tracking-wider shadow-lg">
-                    難易度を設定
+                    文字数を選ぶ
                 </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
