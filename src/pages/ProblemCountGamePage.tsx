@@ -188,7 +188,7 @@ const ProblemCountSetupPage: React.FC = () => {
     const renderProblemText = () => {
         if (!typingText) return null;
         return (
-        <div className="space-y-2">
+        <div className="space-y-2 text-center">
             <div className='text-white'>タイプ数: {totalCorrect}</div>
             <div className="mt-8 text-4xl font-bold text-white">{texts[currentIndex].original}</div>
             <div className="text-2xl text-gray-300 font-medium">{texts[currentIndex].hiragana}</div>
