@@ -13,16 +13,16 @@ interface DifficultySelectProps {
 }
 
 const difficulties: DifficultyOption[] = [
-    { label: "人間", range: "3~6文字程度", value: "human" },
-    { label: "超人", range: "10文字程度", value: "superhuman" },
-    { label: "宇宙人", range: "それ以上", value: "alien" },
+    { label: "human", range: "少", value: "human" },
+    { label: "superman", range: "普通", value: "superhuman" },
+    { label: "alien", range: "多", value: "alien" },
 ]
 
 const DifficultySelect: React.FC<DifficultySelectProps> = ({ difficulty, setDifficulty }) => {
     return (
         <div className="space-y-6">
             <div className="relative">
-                <div className="bg-gray-600 text-white text-center py-2 px-6 rounded-lg font-bold tracking-wider shadow-lg">
+                <div className="text-white text-center py-2 px-6 rounded-lg font-bold tracking-wider shadow-lg">
                     文字数を選ぶ
                 </div>
             </div>

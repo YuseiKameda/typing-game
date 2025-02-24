@@ -78,9 +78,9 @@ const ProblemCountResultPage: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[url(/backgroundImage.jpeg)] bg-cover bg-center">
-            <div className="w-full max-w-3xl bg-gradient-to-r from-gray-400 to-black rounded-3xl border border-gray-800 p-8 space-y-8 shadow-2xl">
-                <h2 className="text-3xl font-bold text-white text-center">結果</h2>
+        <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex flex-col items-center justify-center p-4 font-mono">
+            <div className="w-full max-w-3xl backdrop-blur-sm bg-black/30 border border-gray-700/50 rounded-3xl p-8 space-y-8 shadow-2xl animate-fade-in hover:border-gray-600/50 transition-colors duration-300 flex flex-col">
+                <h2 className="text-3xl text-white text-center">結果</h2>
                 <div className='text-xl text-white space-y-4 text-center'>
                     <p>
                         <span className='text-sm text-gray-300'>クリアタイム：</span>
@@ -103,25 +103,29 @@ const ProblemCountResultPage: React.FC = () => {
                 </div>
                 {!recordRegistered && (
                     <div className="flex flex-col space-y-4 mt-4 items-center">
-                        <p className="text-lg text-yellow-500 text-center">記録に名前をつけて登録しませんか？</p>
-                            <button onClick={handleYes} className="w-64 text-center px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">
+                        <p className="text-md text-yellow-500 text-center">記録に名前をつけて登録しませんか？</p>
+                            <button onClick={handleYes} className="text-center px-6 py-2 font-mono text-sm border rounded transition-all duration-300 focus:outline-none focus:ring-2 bg-yellow-500/10 text-yellow-400 border-yellow-500/50 hover:bg-yellow-500/20 hover:border-yellow-400 focus:ring-yellow-500/40 active:bg-yellow-500/30 shadow-[0_0_15px_rgba(234,179,8,0.1)] hover:shadow-[0_0_20px_rgba(234,179,8,0.2)]">
                                 記録を登録
                             </button>
                     </div>
                 )}
                     <div className="flex flex-col space-y-4 items-center">
                         <Link
-                        to="/ranking"
-                        className="w-64 text-center block py-2 px-4 bg-gray-700 text-white rounded hover:bg-gray-800"
+                            to="/ranking"
+                            className="text-center px-6 py-2 font-mono text-sm border rounded transition-all duration-300 focus:outline-none focus:ring-2 bg-purple-500/10 text-purple-400 border-purple-500/50 hover:bg-purple-500/20 hover:border-purple-400 focus:ring-purple-500/40 active:bg-purple-500/30 shadow-[0_0_15px_rgba(168,85,247,0.1)] hover:shadow-[0_0_20px_rgba(168,85,247,0.2)]"
                         >
-                        ランキング
+                            ランキング
                         </Link>
                     </div>
             </div>
-            <div className='flex flex-col space-y-4 items-center'>
+            <div className='flex flex-col space-y-4 items-center font-mono'>
                 <Link
                 to="/"
-                className='w-64 text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'
+                // className='w-64 text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'
+                className="absolute bottom-12 px-4 py-2 font-mono text-sm text-gray-400 border border-gray-700/50 
+        rounded-full hover:bg-gray-800/50 hover:border-gray-600 transition-all duration-300 
+        focus:outline-none focus:ring-2 focus:ring-gray-500/40 
+        flex items-center gap-2 backdrop-blur-sm bg-black/20"
                 >
                 ホームへ戻る
                 </Link>

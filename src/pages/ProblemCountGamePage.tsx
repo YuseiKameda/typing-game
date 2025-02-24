@@ -203,14 +203,13 @@ const ProblemCountSetupPage: React.FC = () => {
     
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[url(/backgroundImage.jpeg)] bg-cover bg-center">
-            {/* <h2 className="text-2xl font-bold mb-4">タイピングゲーム</h2> */}
+        <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex flex-col items-center justify-center p-4 font-mono">
             {!gameStarted ? (
-                <div className='text-6xl font-bold'>{countdown}</div>
+                <div className='text-6xl text-white'>{countdown}</div>
             ) : (
                 <>
                     <div className={
-                            "w-full max-w-3xl bg-gradient-to-r from-gray-400 to-black rounded-3xl border border-gray-800 p-8 space-y-8 shadow-2xl" + 
+                            "w-full max-w-3xl backdrop-blur-sm bg-black/30 border border-gray-700/50 rounded-3xl p-8 space-y-8 shadow-2xl transition-colors flex-col" + 
                             (feedback === 'ミスタイプ！' ? "border-4 border-red-500" : "border border-gray-800")
                             }>
                         {/* 問題数と経過時間を表示 */}
@@ -220,10 +219,14 @@ const ProblemCountSetupPage: React.FC = () => {
                         </div>
                         <div className='flex-grow flex flex-col items-center justify-center mb-8'>{renderProblemText()}</div>
                     </div>
-                    <div className='flex flex-col space-y-4 items-center'>
+                    <div className='flex flex-col space-y-4 items-center font-mono'>
                         <Link
                         to="/"
-                        className='w-64 text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'
+                        // className='w-64 text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'
+                        className="absolute bottom-12 px-4 py-2 font-mono text-sm text-gray-400 border border-gray-700/50 
+                rounded-full hover:bg-gray-800/50 hover:border-gray-600 transition-all duration-300 
+                focus:outline-none focus:ring-2 focus:ring-gray-500/40 
+                flex items-center gap-2 backdrop-blur-sm bg-black/20"
                         >
                         ホームへ戻る
                         </Link>

@@ -24,11 +24,11 @@ const NicknameModal: React.FC<NicknameModalProps> = ({ onConfirm, onCancel }) =>
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-            <div className="bg-gray-300 rounded p-6 max-w-md w-full">
-                <h3 className="text-lg font-bold mb-4">記録を登録</h3>
+            <div className="bg-gray-600 rounded p-6 max-w-md w-full">
+                <h3 className="text-lg mb-4 text-gray-300">記録を登録</h3>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block mb-1 text-gray-700">ニックネーム</label>
+                        <label className="block mb-1 text-gray-300">ニックネーム</label>
                         <input
                             type="text"
                             value={nickname}
@@ -38,7 +38,7 @@ const NicknameModal: React.FC<NicknameModalProps> = ({ onConfirm, onCancel }) =>
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block mb-1 text-gray-700">アイコンを選ぶ</label>
+                        <label className="block mb-1 text-gray-300">アイコンを選ぶ</label>
                         <div className='flex space-x-4'>
                             {icons.map((icons) => (
                                 <div
@@ -46,7 +46,7 @@ const NicknameModal: React.FC<NicknameModalProps> = ({ onConfirm, onCancel }) =>
                                     onClick={() => setIcon(icons.src)}
                                     className={`cursor-pointer p-1 rounded transition-all ${
                                         icon === icons.src
-                                        ? 'border-4 border-blue-600'
+                                        ? 'border-2 border-blue-600'
                                         : 'border border-gray-300'
                                     }`}
                                 >
@@ -59,13 +59,13 @@ const NicknameModal: React.FC<NicknameModalProps> = ({ onConfirm, onCancel }) =>
                         <button
                             type="button"
                             onClick={onCancel}
-                            className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+                            className="px-4 py-2 font-mono text-sm border rounded transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 bg-gray-800/30 text-gray-400 border-gray-700/50 hover:bg-gray-800/50 hover:border-gray-600"
                         >
                             キャンセル
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
+                            className="text-center px-4 py-2 font-mono text-sm border rounded transition-all duration-300 focus:outline-none focus:ring-2 bg-yellow-500/10 text-yellow-400 border-yellow-500/50 hover:bg-yellow-500/20 hover:border-yellow-400 focus:ring-yellow-500/40 active:bg-yellow-500/30 shadow-[0_0_15px_rgba(234,179,8,0.1)] hover:shadow-[0_0_20px_rgba(234,179,8,0.2)]"
                         >
                             登録する
                         </button>

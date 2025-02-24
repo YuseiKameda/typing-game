@@ -1,5 +1,6 @@
 import React, { useState, useEffect} from "react";
 import { supabase } from "../lib/supabaseClient";
+import Button from "../components/Button";
 import { Link } from "react-router-dom";
 
 interface RankingRecord {
@@ -53,15 +54,13 @@ const RankingPage: React.FC = () => {
         return (
             <div className="mb-6 flex space-x-4">
                 {options.map((count) => (
-                    <button
+                    <Button
                         key={count}
                         onClick={() => setSelectedProblemCount(count)}
-                        className={`px-4 py-2 rounded transition-colors ${
-                            selectedProblemCount === count ? 'bg-gray-900 text-white ' : 'bg-gray-300 text-black hover:bg-gray-400'
-                        }`}
+                        selected={selectedProblemCount === count}
                     >
                         {count}門
-                    </button>
+                    </Button>
                 ))}
 
             </div>
@@ -78,23 +77,21 @@ const RankingPage: React.FC = () => {
         return (
             <div className="mb-6 flex space-x-4">
                 {options.map((diff) => (
-                    <button
+                    <Button
                         key={diff.value}
                         onClick={() => setSelectedDifficulty(diff.value)}
-                        className={`px-4 py-2 rounded transition-colors ${
-                            selectedDifficulty === diff.value ? 'bg-gray-900 text-white' : 'bg-gray-300 text-black hover-bg-gray-400'
-                        }`}
+                        selected={selectedDifficulty === diff.value}
                     >
                         {diff.label}
-                    </button>
+                    </Button>
                 ))}
             </div>
         );
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[url(/backgroundImage.jpeg)] bg-cover bg-center">
-            <h2 className="text-3xl text-white font-bold mb-6">ランキング</h2>
+        <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex flex-col items-center justify-center p-4 font-mono">
+            <h2 className="text-3xl text-white mb-6">ランキング</h2>
             {renderDifficultyTabs()}
             {renderTabs()}
             {loading ? (
@@ -102,7 +99,7 @@ const RankingPage: React.FC = () => {
                     <p>ロード中...</p>
                 </div>
             ) : (
-                <div className="w-full max-w-xl bg-gradient-to-r from-gray-400 to-black rounded-3xl border border-gray-800 px-4 py-6 space-y-8 shadow-2xl">
+                <div className="w-full max-w-3xl backdrop-blur-sm bg-black/30 border border-gray-700/50 rounded-3xl p-8 space-y-8 shadow-2xl animate-fade-in hover:border-gray-600/50 transition-colors duration-300 flex flex-col">
                     <div className="flex-grow overflow-y-auto max-h-[400px] px-4">
                         {rankings.length > 0 ? (
                             rankings.map((record, index) => {
@@ -136,9 +133,16 @@ const RankingPage: React.FC = () => {
                     </div>
                 </div>
             )}
-            <div className="mt-4">
-                <Link to='/' className='text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'>
-                    ホームへ戻る
+            <div className='flex flex-col space-y-4 items-center font-mono'>
+                <Link
+                to="/"
+                // className='w-64 text-center block bg-gray-300 hover:bg-gray-500 text-black font-bold py-2 px-4 rounded mt-4'
+                className="absolute bottom-6 px-4 py-2 font-mono text-sm text-gray-400 border border-gray-700/50 
+                    rounded-full hover:bg-gray-800/50 hover:border-gray-600 transition-all duration-300 
+                    focus:outline-none focus:ring-2 focus:ring-gray-500/40 
+                    flex items-center gap-2 backdrop-blur-sm bg-black/20"
+                >
+                ホームへ戻る
                 </Link>
             </div>
         </div>

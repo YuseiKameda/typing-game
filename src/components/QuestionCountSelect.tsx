@@ -21,7 +21,7 @@ const QuestionCountSelect: React.FC<QuestionCountSelectProps> = ({ problemCount,
     return (
         <div className="space-y-6">
             <div className="relative">
-                <div className="bg-gray-600 text-white text-center py-2 px-6 rounded-lg font-bold tracking-wider shadow-lg">
+                <div className="text-white text-center py-2 px-6 rounded-lg font-bold tracking-wider shadow-lg">
                     問題数を選ぶ
                 </div>
             </div>
