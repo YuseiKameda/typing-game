@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 interface RankingRecord {
     id: number;
     mode: string;
+    language: string;
     difficulty: string;
     problem_count: number | null;
     time_limit: number | null;
@@ -20,6 +21,7 @@ interface RankingRecord {
 const RankingPage: React.FC = () => {
     const [selectedProblemCount, setSelectedProblemCount] = useState<number>(5);
     const [selectedDifficulty, setSelectedDifficulty] = useState<string>('human');
+    const [selectedLanguage, setSelectedLanguage] = useState<string>('japanese');
     const [rankings, setRankings] = useState<RankingRecord[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -32,6 +34,7 @@ const RankingPage: React.FC = () => {
                 .select('*')
                 .eq('mode', 'problem_count')
                 .eq('problem_count', selectedProblemCount)
+                .eq('language', selectedLanguage)
                 .eq('difficulty', selectedDifficulty);
             if (error) {
                 console.error('Error fetching rankings:', error);
@@ -46,7 +49,7 @@ const RankingPage: React.FC = () => {
             setLoading(false);
         };
         fetchRankings();
-    }, [selectedProblemCount, selectedDifficulty]);
+    }, [selectedProblemCount, selectedDifficulty, selectedLanguage]);
 
     // 問題数タブ
     const renderTabs = () => {
@@ -89,9 +92,31 @@ const RankingPage: React.FC = () => {
         );
     };
 
+    // 難易度タブ
+    const renderLanguageTabs = () => {
+        const options = [
+            { label: '日本語', value: 'japanese' },
+            { label: '英語', value: 'english' },
+        ];
+        return (
+            <div className="mb-6 flex space-x-4">
+                {options.map((lang) => (
+                    <Button
+                        key={lang.value}
+                        onClick={() => setSelectedLanguage(lang.value)}
+                        selected={selectedLanguage === lang.value}
+                    >
+                        {lang.label}
+                    </Button>
+                ))}
+            </div>
+        );
+    };
+
     return (
         <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex flex-col items-center justify-center p-4 font-mono">
             <h2 className="text-3xl text-white mb-6">ランキング</h2>
+            {renderLanguageTabs()}
             {renderDifficultyTabs()}
             {renderTabs()}
             {loading ? (

@@ -173,19 +173,7 @@ const ProblemCountSetupPage: React.FC = () => {
                     // 全問終了時の処理
                     const endTime = Date.now();
                     const totalTime = (endTime - (startTime || endTime)) / 1000;
-                    // const record = {
-                    //     mode: 'problem_count',
-                    //     difficulty,
-                    //     problem_count: problemCount,
-                    //     time_limit: null,
-                    //     clear_time: totalTime,
-                    //     correct_count: totalCorrect,
-                    //     mistake_count: totalMistakes,
-                    //     nickname: 'anonymous',
-                    //     icon: null,
-                    // };
-                    // await registerRecord(record);
-                    navigate('/result', { state: { totalTime, totalCorrect, totalMistakes, difficulty, problemCount } });
+                    navigate('/result', { state: { totalTime, totalCorrect, totalMistakes, difficulty, problemCount, selectedLanguage } });
                 }
             }
             setFeedback('');

@@ -9,10 +9,12 @@ interface LocationState {
     totalMistakes: number;
     difficulty: string;
     problemCount: number;
+    selectedLanguage: string;
 }
 
 interface RankingRecord {
     mode: string;
+    language: string;
     difficulty: string;
     problem_count: number;
     time_limit: number | null;
@@ -36,7 +38,7 @@ const ProblemCountResultPage: React.FC = () => {
         return null;
     }
 
-    const { totalTime, totalCorrect, totalMistakes, difficulty, problemCount } = state;
+    const { totalTime, totalCorrect, totalMistakes, difficulty, problemCount, selectedLanguage } = state;
     const finalTotalCorrect = totalCorrect + 1
     const totalKeystrokes = finalTotalCorrect + totalMistakes;
     const kps = totalTime > 0 ? (finalTotalCorrect / totalTime).toFixed(2) : '0';
@@ -61,6 +63,7 @@ const ProblemCountResultPage: React.FC = () => {
         const record: RankingRecord = {
             mode: 'problem_count',
             difficulty,
+            language: selectedLanguage,
             problem_count: problemCount,
             time_limit: null,
             clear_time: totalTime,
