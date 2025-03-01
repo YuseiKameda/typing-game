@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import DifficultySelect from '../components/DifficultySelect';
 import Button from '../components/Button';
+import DifficultySelect from '../components/DifficultySelect';
 import QuestionCountSelect from '../components/QuestionCountSelect';
+import LanguageSelect from '../components/LanguageSelect';
 
 const ProblemCountSetupPage: React.FC = () => {
     const navigate = useNavigate();
     const [difficulty, setDifficulty] = useState<string>('');
     const [problemCount, setProblemCount] = useState<number | null>(null);
+    const [selectedLanguage, setSelectedLanguage] = useState<string>('japanese');
 
     const handleStart = () => {
-        navigate('/game', { state: {difficulty, problemCount } });
+        navigate('/game', { state: {difficulty, problemCount, selectedLanguage } });
     };
 
     return (
         <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex flex-col items-center justify-center p-4 font-mono">
             <div className="w-full max-w-3xl backdrop-blur-sm bg-black/30 border border-gray-700/50 rounded-3xl p-8 space-y-8 shadow-2xl animate-fade-in hover:border-gray-600/50 transition-colors duration-300 flex flex-col">
+                <LanguageSelect selectedLanguage={selectedLanguage} setSelectedLanguage={setSelectedLanguage} />
                 <DifficultySelect difficulty={difficulty} setDifficulty={setDifficulty} />
                 <QuestionCountSelect problemCount={problemCount} setProblemCount={setProblemCount} />
                 <div className="flex items-center justify-center pt-4">

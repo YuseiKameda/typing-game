@@ -95,7 +95,7 @@ const RankingPage: React.FC = () => {
             {renderDifficultyTabs()}
             {renderTabs()}
             {loading ? (
-                <div className="w-full max-w-xl bg-gradient-to-r from-gray-400 to-black rounded-3xl border border-gray-800 p-8 space-y-8 shadow-2xl">
+                <div className="w-full max-w-3xl backdrop-blur-sm bg-black/30 border border-gray-700/50 rounded-3xl p-8 space-y-8 shadow-2xl animate-fade-in hover:border-gray-600/50 transition-colors duration-300 flex flex-col">
                     <p>ロード中...</p>
                 </div>
             ) : (
@@ -103,6 +103,7 @@ const RankingPage: React.FC = () => {
                     <div className="flex-grow overflow-y-auto max-h-[400px] px-4">
                         {rankings.length > 0 ? (
                             rankings.map((record, index) => {
+                                const clearTime = record.clear_time.toFixed(2);
                                 const kps = record.clear_time > 0 ? (record.correct_count / record.clear_time).toFixed(2) : '0';
                                 const total = record.correct_count + record.mistake_count;
                                 const accuracy = total > 0 ? ((record.correct_count / total) * 100).toFixed(1) : '0';
@@ -118,6 +119,10 @@ const RankingPage: React.FC = () => {
                                             <p>
                                                 <span className="text-sm text-gray-300">速度: </span>
                                                 <span className="text-lg font-bold">{kps} /s</span>
+                                            </p>
+                                            <p>
+                                                <span className="text-sm text-gray-300">時間: </span>
+                                                <span>{clearTime} s</span>
                                             </p>
                                             <p className="text-sm">
                                                 <span className="text-gray-300">正確性: </span>

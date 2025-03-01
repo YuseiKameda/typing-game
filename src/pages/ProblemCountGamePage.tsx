@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import { EnglishTypingText } from '../utils/EnglishTypingText';
 
 interface LocationState {
     difficulty: string;
     problemCount: number;
+    selectedLanguage: string;
 }
 
 interface DBText {
@@ -33,10 +35,10 @@ const ProblemCountSetupPage: React.FC = () => {
     const navigate = useNavigate();
     const state = location.state as LocationState | undefined;
     // const inputRef = useRef<HTMLInputElement>(null);
-    
+
     const [texts, setTexts] = useState<DBText[]>([]);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
-    const [typingText, setTypingText] = useState<TypingText | null>(null);
+    const [typingText, setTypingText] = useState<TypingText | EnglishTypingText | null>(null);
     const [feedback, setFeedback] = useState<string>('');
     const [userInputDisplay, setUserInputDisplay] = useState<string>('');
 
@@ -55,7 +57,7 @@ const ProblemCountSetupPage: React.FC = () => {
         }
     }, [state, navigate]);
 
-    const { difficulty, problemCount } = state || { difficulty: 'human', problemCount: 10 };
+    const { difficulty, problemCount, selectedLanguage } = state || { difficulty: 'human', problemCount: 10, selectedLanguage: 'japanese' };
 
 
     // Supabsaseから問題文を取得
@@ -65,6 +67,7 @@ const ProblemCountSetupPage: React.FC = () => {
                 .from('typing_texts')
                 .select('*')
                 .eq('difficulty', difficulty)
+                .eq('language', selectedLanguage);
             if (error) {
                 console.error('Error fetching problems:', error);
                 return [];
@@ -77,14 +80,19 @@ const ProblemCountSetupPage: React.FC = () => {
                 }
                 const selected = shuffled.slice(0, problemCount);
                 setTexts(selected);
-                const first = new TypingText(selected[0].hiragana);
-                setTypingText(first);
+                let instance;
+                if (selectedLanguage === 'english') {
+                    instance = new EnglishTypingText(selected[0].original);
+                } else {
+                    instance = new TypingText(selected[0].hiragana);
+                }
+                setTypingText(instance);
             } else {
                 console.error('No problems found for difficulty:', difficulty);
             }
         };
         fetchTexts();
-    }, [difficulty, problemCount]);
+    }, [difficulty, problemCount, selectedLanguage]);
 
     // カウントダウン
     useEffect(() => {
@@ -150,10 +158,17 @@ const ProblemCountSetupPage: React.FC = () => {
                 // 次のテキストへ移行
                 if (currentIndex + 1 < texts.length) {
                     const nextIndex = currentIndex + 1;
-                    const nextText = new TypingText(texts[nextIndex].hiragana);
-                    setTypingText(nextText);
-                    setCurrentIndex(nextIndex);
-                    setUserInputDisplay(nextText.completedRoman);
+                    if (selectedLanguage === 'english') {
+                        const nextText = new EnglishTypingText(texts[nextIndex].original);
+                        setTypingText(nextText);
+                        setCurrentIndex(nextIndex);
+                        setUserInputDisplay(nextText.completedRoman);
+                    } else {
+                        const nextText = new TypingText(texts[nextIndex].hiragana);
+                        setTypingText(nextText);
+                        setCurrentIndex(nextIndex);
+                        setUserInputDisplay(nextText.completedRoman);
+                    }
                 } else {
                     // 全問終了時の処理
                     const endTime = Date.now();
@@ -180,23 +195,32 @@ const ProblemCountSetupPage: React.FC = () => {
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
         }
-    }, [gameStarted, typingText, currentIndex, texts, startTime, totalCorrect, totalMistakes, difficulty, problemCount, navigate]);
+    }, [gameStarted, typingText, currentIndex, texts, startTime, totalCorrect, totalMistakes, difficulty, problemCount, selectedLanguage, navigate]);
 
 
 
     // 表示用: 上段にローマ字（入力済み部分を反映）、中段にひらがな、下段に元の日本語
     const renderProblemText = () => {
         if (!typingText) return null;
+        // const nextChar = typingText.remainingRoman.charAt(0);
+        // const restChars = typingText.remainingRoman.slice(1);
+        // const displayChar = nextChar === ' ' ? '\u00A0' : nextChar;
         return (
-        <div className="space-y-2 text-center">
-            <div className='text-white'>タイプ数: {totalCorrect}</div>
-            <div className="mt-8 text-4xl font-bold text-white">{texts[currentIndex].original}</div>
-            <div className="text-2xl text-gray-300 font-medium">{texts[currentIndex].hiragana}</div>
-            <div className="text-xl text-green-500 font-mono">
-                <span className="font-bold">{userInputDisplay}</span>
-                <span className="text-gray-200">{typingText.remainingRoman}</span>
+            <div className="space-y-2 text-center">
+                <div className='text-white'>タイプ数: {totalCorrect}</div>
+                <div className="mt-6 text-xl text-gray-300 font-medium">{texts[currentIndex].hiragana}</div>
+                {selectedLanguage === 'japanese' ? <div className="text-4xl font-bold text-white">{texts[currentIndex].original}</div> : null }
+                {/* <div className="text-4xl font-bold text-white">{texts[currentIndex].original}</div> */}
+                <div className="mt-4 text-2xl text-green-500 font-mono">
+                    <span className="text-xl font-bold">{userInputDisplay}</span>
+                    <span className="text-xl text-gray-200">
+                        {/* {typingText.remainingRoman.length > 0 ? (
+                            <span className='relative inline-block'>{displayChar}<span className="absolute left-0 right-0 -bottom-1 border-b border-white"></span></span>
+                        ) : null} */}
+                        {typingText.remainingRoman}
+                    </span>
+                </div>
             </div>
-        </div>
         );
     };
 
@@ -210,7 +234,7 @@ const ProblemCountSetupPage: React.FC = () => {
                 <>
                     <div className={
                             "w-full max-w-3xl backdrop-blur-sm bg-black/30 border border-gray-700/50 rounded-3xl p-8 space-y-8 shadow-2xl transition-colors flex-col" + 
-                            (feedback === 'ミスタイプ！' ? "border-4 border-red-500" : "border border-gray-800")
+                            (feedback === 'ミスタイプ！' ? "border-4 border-red-500" : "")
                             }>
                         {/* 問題数と経過時間を表示 */}
                         <div className='flex justify-end items-center'>

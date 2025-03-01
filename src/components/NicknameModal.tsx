@@ -33,7 +33,7 @@ const NicknameModal: React.FC<NicknameModalProps> = ({ onConfirm, onCancel }) =>
                             type="text"
                             value={nickname}
                             onChange={(e) => setNickname(e.target.value)}
-                            className="w-full px-3 py-2 border rounded"
+                            className="w-full px-3 py-2 border rounded text-white"
                             placeholder="例: タイピングマスター"
                         />
                     </div>
@@ -46,7 +46,7 @@ const NicknameModal: React.FC<NicknameModalProps> = ({ onConfirm, onCancel }) =>
                                     onClick={() => setIcon(icons.src)}
                                     className={`cursor-pointer p-1 rounded transition-all ${
                                         icon === icons.src
-                                        ? 'border-2 border-blue-600'
+                                        ? 'border-2 border-blue-500'
                                         : 'border border-gray-300'
                                     }`}
                                 >
